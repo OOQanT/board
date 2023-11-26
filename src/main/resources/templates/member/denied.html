@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container2 {
+        max-width: 560px;
+        margin: auto;
+        }
+        .field-error {
+        border-color: #dc3545;
+        color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{layout/top::header}"></div>
+    <div class="container2">
+        <div style="padding-top:50px;"  class="col">
+            <div class="container text-center">
+                <h1><span th:text="${username}" class="alert alert-danger" />님은 접근 권한이 없습니다.</h1>
+                <br />
+                <h3 th:text="${exception}"></h3>
+            </div>
+        </div>
+    </div> <!-- /container -->
+</body>
+</html>
