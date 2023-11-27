@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container2 {
+        max-width: 560px;
+        margin: auto;
+        }
+        .field-error {
+        border-color: #dc3545;
+        color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="layout/top::header"></div>
+<div class="container2">
+    <div class="py-5 text-center">
+        <h2>글작성</h2>
+    </div>
+    <hr/>
+    <form th:action="@{/createContent}" th:object="${form}" method="post">
+        <div>
+            <label for="title">제목</label>
+            <input type="text" id="title" th:field="*{title}" class="form-control" readonly >
+        </div>
+        <div>
+            <label for="content">내용</label>
+            <textarea id="content" th:field="*{content}" class="form-control" rows="8" cols="100" readonly></textarea>
+        </div>
+        <hr class="my-4">
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg"
+                        th:if="${contentId eq userId}"
+                        th:onclick="|location.href='@{/content/{contentId}/edit(contentId = ${contentId})}'|" type="button" >수정</button>
+                <button class="w-100 btn btn-primary btn-lg" th:unless="${contentId eq userId}" type="button" disabled>수정</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg" th:onclick="|location.href='@{/contents}'|" type="button">글목록</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import spring.board.domain.Member;
 import spring.board.dto.board.BoardDto;
@@ -44,10 +45,7 @@ public class BoardController {
             return "board/board";
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Member member = (Member) authentication.getPrincipal();
-        String username = member.getUsername();
-        boardService.save(boardDto,username);
+        boardService.save(boardDto,getAuthMember().getUsername());
 
         return "redirect:/";
     }
@@ -58,4 +56,29 @@ public class BoardController {
         model.addAttribute("contents",contents);
         return "board/contents";
     }
+
+    @GetMapping("/contents/{contentId}")
+    public String contentDetail(@PathVariable("contentId") Long contentId, Model model){
+        BoardDto findContent = boardService.findById(contentId);
+        model.addAttribute("form",findContent);
+        model.addAttribute("contentId",contentId);
+
+        // 인증된 사용자의 id 값을 넘겨줌 contentId 값과 다르면 수정 버튼 비활성
+        model.addAttribute("userId",getAuthMember().getId());
+
+        return "board/content";
+    }
+
+    private static Member getAuthMember() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member member = (Member) authentication.getPrincipal();
+        return member;
+    }
+
+    /*@GetMapping("/content/{contentId}/edit")
+    public String editContent(@PathVariable("contentId") Long contentId, Model model){
+
+    }*/
+
+
 }

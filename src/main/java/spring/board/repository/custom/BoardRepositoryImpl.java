@@ -32,8 +32,9 @@ public class BoardRepositoryImpl implements CustomBoardRepository{
                         board.createTime
                 ))
                 .from(board)
-                .join(board.member, member).fetchJoin()
+                .innerJoin(board.member, member)
                 .fetch();
+
 
         return searchContents;
     }

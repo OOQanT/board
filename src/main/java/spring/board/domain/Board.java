@@ -38,6 +38,11 @@ public class Board {
         this.content = boardDto.getContent();
     }
 
+    public Board(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
     public void setBoard(String title, String content){
         this.title = title;
         this.content = content;

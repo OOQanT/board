@@ -21,11 +21,27 @@
             <div class="py-5 text-center">
                 <h2>글목록</h2>
             </div>
+            <button type="button" class="btn btn-secondary" th:onclick="|location.href='@{/board}'|"  >글쓰기</button>
             <hr/>
-            <form th:object="${}">
 
-            </form>
-
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>글번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>날짜</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="content : ${contents}">
+                    <td><a th:text="${content.contentId}" th:href="@{contents/{contentId}(contentId = ${content.contentId})}"> </a></td>
+                    <td><a th:text="${content.title}" th:href="@{contents/{contentId}(contentId = ${content.contentId})}"> </a></td>
+                    <td th:text="${content.author}"></td>
+                    <td th:text="${#temporals.format(content.createTime,'yyyy-MM-dd HH:mm')}"></td>
+                </tr>
+                </tbody>
+            </table>
 
         </div>
     </body>

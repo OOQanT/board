@@ -12,6 +12,7 @@ import spring.board.repository.BoardRepository;
 import spring.board.repository.MemberRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -31,5 +32,10 @@ public class BoardService {
 
     public List<SearchContentDto> findContent(){
         return boardRepository.searchContent();
+    }
+
+    public BoardDto findById(Long contentId){
+        Board findBoard = boardRepository.findById(contentId).orElse(new Board("Not Found Content", "글 정보를 찾을 수 없습니다."));
+        return new BoardDto(findBoard.getTitle(), findBoard.getContent());
     }
 }
