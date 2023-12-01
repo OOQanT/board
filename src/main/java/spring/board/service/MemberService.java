@@ -11,12 +11,13 @@ import spring.board.repository.MemberRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
+
     public void save(MemberDto memberDto){
         Member member = new Member(memberDto);
         member.setPassword(passwordEncoder.encode(member.getPassword()));
@@ -29,4 +30,15 @@ public class MemberService {
 
         memberRepository.save(member);
     }
+
+    public Member findById(Long id){
+        Member findMember = memberRepository.findById(id).orElseThrow();
+        return findMember;
+    }
+
+    public Member findByUsername(String username){
+        return memberRepository.findByUsername(username);
+    }
+
+
 }

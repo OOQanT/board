@@ -2,11 +2,14 @@ package spring.board.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.Board;
 import spring.board.domain.Member;
 import spring.board.dto.board.BoardDto;
+import spring.board.dto.board.SearchCondition;
 import spring.board.dto.board.SearchContentDto;
 import spring.board.repository.BoardRepository;
 import spring.board.repository.MemberRepository;
@@ -34,8 +37,23 @@ public class BoardService {
         return boardRepository.searchContent();
     }
 
-    public BoardDto findById(Long contentId){
+    public Board findById(Long contentId){
         Board findBoard = boardRepository.findById(contentId).orElse(new Board("Not Found Content", "글 정보를 찾을 수 없습니다."));
-        return new BoardDto(findBoard.getTitle(), findBoard.getContent());
+        return findBoard;
+    }
+
+    public void edit(BoardDto boardDto, Long contentId){
+        Board findBoard = boardRepository.findById(contentId).orElseThrow();
+        findBoard.setBoard(boardDto.getTitle(), boardDto.getContent());
+    }
+
+    public void delete(Long contentId){
+        Board board = boardRepository.findById(contentId).orElseThrow();
+        boardRepository.delete(board);
+    }
+
+
+    public Page<SearchContentDto> pagingContent(SearchCondition searchCondition, PageRequest pageable) {
+        return boardRepository.searchContentPage(searchCondition,pageable);
     }
 }

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container2 {
+        max-width: 560px;
+        margin: auto;
+        }
+        .field-error {
+        border-color: #dc3545;
+        color: #dc3545;
+        }
+        .center-align {
+        text-align: center;
+        }
+        .right-align {
+        text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="layout/top::header"></div>
+    <div class="container2">
+        <div class="py-5 text-center">
+            <h2>글목록</h2>
+        </div>
+
+        <form th:object="${searchCondition}" class="form-inline">
+            <div class="row g-3 align-items-center justify-content-end">
+                <div class="col-auto">
+                    <input type="text" id="searchTitle" th:field="*{title}" class="form-control" aria-describedby="passwordHelpInline" placeholder="글제목">
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="searchAuthor" th:field="*{nickname}" class="form-control" aria-describedby="passwordHelpInline" placeholder="작성자">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">검색</button>
+                </div>
+            </div>
+        </form>
+
+        <hr/>
+        <button type="button" class="btn btn-secondary" th:onclick="|location.href='@{/board}'|"  >글쓰기</button>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>글번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="content : ${contentPage.content}">
+                <td><a th:text="${content.contentId}" th:href="@{'/contents/{contentId}'(contentId = ${content.contentId})}"> </a></td>
+                <td><a th:text="${content.title}" th:href="@{'/contents/{contentId}'(contentId = ${content.contentId})}"> </a></td>
+                <td th:text="${content.author}"></td>
+                <td th:text="${#temporals.format(content.createTime,'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination d-flex justify-content-center">
+
+                   <li class="page-item" th:class="${contentPage.isFirst ? 'disabled' : ''}">
+                       <a class="page-link" th:href="${contentPage.isFirst ? '#' : '/content/search?page=' + (contentPage.number-1)}" aria-label="Previous">&laquo;</a>
+                   </li>
+
+                    <!-- 페이지 네비게이션 -->
+                    <li class="page-item" th:each="pageNum : ${#numbers.sequence(T(java.lang.Math).max(0, contentPage.number - 2),T(java.lang.Math).min(contentPage.totalPages - 1, contentPage.number + 2))}"
+                        th:class="${contentPage.number == pageNum ? 'active': ''}" aria-current="page">
+                        <a class="page-link" th:href="@{/content/search(page=${pageNum})}" th:text="${pageNum + 1}"></a>
+                    </li>
+
+
+                   <li class="page-item" th:class="${contentPage.isLast ? 'disabled' : ''}">
+                       <a class="page-link" th:href="${contentPage.isLast ? '#' : '/content/search?page=' + (contentPage.number+1)}" aria-label="Next">&raquo;</a>
+                   </li>
+
+                </ul>
+            </nav>
+
+
+    </div>
+</body>
+</html>

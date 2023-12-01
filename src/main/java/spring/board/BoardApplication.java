@@ -27,20 +27,18 @@ public class BoardApplication {
 		memberService.save(user);
 		memberService.save(manager);
 
-		BoardDto test1 = new BoardDto("test1","test1");
-		BoardDto test2 = new BoardDto("test2","test2");
-		BoardDto test3 = new BoardDto("test3","test3");
+		for(int i=0; i<50; i++){
+			boardService.save(new BoardDto("test"+i,"test"+i),user.getUsername());
+		}
 
-		BoardDto test4 = new BoardDto("test4,","test4");
-		BoardDto test5 = new BoardDto("test5,","test5");
-		BoardDto test6 = new BoardDto("test6,","test6");
-
-		boardService.save(test1,user.getUsername());
-		boardService.save(test2,user.getUsername());
-		boardService.save(test3,user.getUsername());
-		boardService.save(test4,manager.getUsername());
-		boardService.save(test5,manager.getUsername());
-		boardService.save(test6,manager.getUsername());
+		boardService.save(new BoardDto("안녕하세요1","안녕하세요"),manager.getUsername());
+		boardService.save(new BoardDto("안녕하세요2","안녕하세요"),manager.getUsername());
+		boardService.save(new BoardDto("안녕하세요3","안녕하세요"),manager.getUsername());
+		boardService.save(new BoardDto("안녕하세요4","안녕하세요"),manager.getUsername());
+		boardService.save(new BoardDto("반가워요1","반가워요"), manager.getUsername());
+		boardService.save(new BoardDto("반가워요2","반가워요"), manager.getUsername());
+		boardService.save(new BoardDto("반가워요3","반가워요"), manager.getUsername());
+		boardService.save(new BoardDto("반가워요4","반가워요"), manager.getUsername());
 
 	}
 }

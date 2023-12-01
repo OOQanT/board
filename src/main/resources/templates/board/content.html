@@ -13,6 +13,9 @@
         border-color: #dc3545;
         color: #dc3545;
         }
+        .right-align {
+        text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -20,6 +23,10 @@
 <div class="container2">
     <div class="py-5 text-center">
         <h2>글작성</h2>
+    </div>
+    <div class="right-align">
+        <button type="button" th:if="${userId}" class="btn btn-danger" th:onclick="|location.href='@{/delete/content/{contentId}(contentId=${contentId})}'|">글삭제</button>
+        <button type="button" th:unless="${userId}" class="btn btn-danger" disabled>글삭제</button>
     </div>
     <hr/>
     <form th:action="@{/createContent}" th:object="${form}" method="post">
@@ -35,9 +42,9 @@
         <div class="row">
             <div class="col">
                 <button class="w-100 btn btn-primary btn-lg"
-                        th:if="${contentId eq userId}"
+                        th:if="${userId}"
                         th:onclick="|location.href='@{/content/{contentId}/edit(contentId = ${contentId})}'|" type="button" >수정</button>
-                <button class="w-100 btn btn-primary btn-lg" th:unless="${contentId eq userId}" type="button" disabled>수정</button>
+                <button class="w-100 btn btn-primary btn-lg" th:unless="${userId}" type="button" disabled>수정</button>
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg" th:onclick="|location.href='@{/contents}'|" type="button">글목록</button>
