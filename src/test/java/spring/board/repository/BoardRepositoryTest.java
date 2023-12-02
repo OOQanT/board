@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import spring.board.domain.Board;
+import spring.board.domain.Member;
 import spring.board.dto.board.SearchContentDto;
 
 import static org.assertj.core.api.Assertions.*;
@@ -48,6 +50,15 @@ class BoardRepositoryTest {
 
         assertThat(result.getSize()).isEqualTo(2);
         assertThat(result.getContent()).extracting("author").containsExactly("user","user");
+    }
+
+
+    @Test
+    public void findById(){
+        Board findBoard = boardRepository.findById(1L).orElse(null);
+        Member member = findBoard.getMember();
+
+        assertThat(member.getNickname()).isEqualTo("user");
     }
 
 }

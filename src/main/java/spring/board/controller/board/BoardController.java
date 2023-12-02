@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import spring.board.domain.Board;
 import spring.board.domain.Member;
 import spring.board.dto.board.BoardDto;
+import spring.board.dto.board.ContentDetailDto;
 import spring.board.dto.board.SearchCondition;
 import spring.board.dto.board.SearchContentDto;
 import spring.board.repository.MemberRepository;
@@ -32,7 +33,6 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
-    private final MemberService memberService;
 
     @GetMapping("/board")
     public String board(Model model){
@@ -60,12 +60,14 @@ public class BoardController {
         return "board/contents";
     }
 
+    // 폼으로 댓글 정보 얻어옴 SaveCommentDto
+    // contentId를 이용해 Board와 member객체를 찾음
     @GetMapping("/contents/{contentId}")
     public String contentDetail(@PathVariable("contentId") Long contentId, Model model){
-        Board findContent = boardService.findById(contentId);
-        model.addAttribute("form",findContent);
-        model.addAttribute("contentId",contentId);
+        ContentDetailDto findContentDetail = boardService.findContentDetail(contentId);
+        model.addAttribute("form",findContentDetail);
 
+        model.addAttribute("contentId",contentId);
 
         String boardUser = boardService.findById(contentId).getMember().getUsername();
         model.addAttribute("userId",namesEq(boardUser));

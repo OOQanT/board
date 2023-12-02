@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.Board;
 import spring.board.domain.Member;
 import spring.board.dto.board.BoardDto;
+import spring.board.dto.board.ContentDetailDto;
 import spring.board.dto.board.SearchCondition;
 import spring.board.dto.board.SearchContentDto;
 import spring.board.repository.BoardRepository;
@@ -40,6 +41,12 @@ public class BoardService {
     public Board findById(Long contentId){
         Board findBoard = boardRepository.findById(contentId).orElse(new Board("Not Found Content", "글 정보를 찾을 수 없습니다."));
         return findBoard;
+    }
+
+    public ContentDetailDto findContentDetail(Long contentId){
+        Board findBoard = boardRepository.findById(contentId).orElse(new Board("Not Found Content", "글 정보를 찾을 수 없습니다."));
+        String nickname = findBoard.getMember().getNickname();
+        return new ContentDetailDto(nickname, findBoard.getTitle(),findBoard.getContent());
     }
 
     public void edit(BoardDto boardDto, Long contentId){
