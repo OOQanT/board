@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.board.domain.Board;
 import spring.board.domain.BoardComment;
+import spring.board.dto.boardcomment.FindCommentDto;
 import spring.board.dto.boardcomment.SaveCommentDto;
 import spring.board.repository.BoardCommentRepository;
 import spring.board.repository.BoardRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,5 +25,10 @@ public class BoardCommentService {
         BoardComment boardComment = new BoardComment(saveCommentDto.getComment(), nickname);
         boardComment.setBoard(findBoard);
         boardCommentRepository.save(boardComment);
+    }
+
+    public List<FindCommentDto> findComments(Long contentId) {
+        List<FindCommentDto> findContents = boardCommentRepository.findByContentId(contentId);
+        return findContents;
     }
 }

@@ -20,7 +20,9 @@ import spring.board.dto.board.BoardDto;
 import spring.board.dto.board.ContentDetailDto;
 import spring.board.dto.board.SearchCondition;
 import spring.board.dto.board.SearchContentDto;
+import spring.board.dto.boardcomment.FindCommentDto;
 import spring.board.repository.MemberRepository;
+import spring.board.service.BoardCommentService;
 import spring.board.service.BoardService;
 import spring.board.service.MemberService;
 
@@ -33,6 +35,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
+    private final BoardCommentService boardCommentService;
 
     @GetMapping("/board")
     public String board(Model model){
@@ -68,6 +71,11 @@ public class BoardController {
         model.addAttribute("form",findContentDetail);
 
         model.addAttribute("contentId",contentId);
+
+        List<FindCommentDto> comments = boardCommentService.findComments(contentId);
+        model.addAttribute("comments",comments);
+        // commentId, boardId, nickname, comment, lastUpdateTime
+
 
         String boardUser = boardService.findById(contentId).getMember().getUsername();
         model.addAttribute("userId",namesEq(boardUser));
