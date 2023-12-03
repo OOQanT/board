@@ -73,7 +73,8 @@ public class BoardController {
         model.addAttribute("contentId",contentId);
 
         List<FindCommentDto> comments = boardCommentService.findComments(contentId);
-        model.addAttribute("comments",comments);
+        log.info("comments.size()={}",comments.size());
+        model.addAttribute("comments",comments); // 여기에 댓글들을 담아서 보냄
         // commentId, boardId, nickname, comment, lastUpdateTime
 
 
