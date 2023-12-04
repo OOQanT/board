@@ -35,4 +35,22 @@ public class BoardCommentRepositoryImpl implements CustomBoardCommentRepository{
 
         return findCommentDtos;
     }
+
+    @Override
+    public FindCommentDto findByCommentId(Long commentId) {
+
+        FindCommentDto findCommentDto = query
+                .select(new QFindCommentDto(
+                        boardComment.id.as("commentId"),
+                        boardComment.board.id.as("boardId"),
+                        boardComment.nickname,
+                        boardComment.comment,
+                        boardComment.updateTime.as("lastUpdateTime")
+                ))
+                .from(boardComment)
+                .where(boardComment.id.eq(commentId))
+                .fetchOne();
+
+        return findCommentDto;
+    }
 }

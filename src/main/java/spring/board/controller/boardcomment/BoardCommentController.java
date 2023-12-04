@@ -1,18 +1,17 @@
 package spring.board.controller.boardcomment;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import spring.board.dto.boardcomment.SaveCommentDto;
 import spring.board.service.BoardCommentService;
 
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class BoardCommentController {
@@ -33,5 +32,14 @@ public class BoardCommentController {
 
         boardCommentService.save(contentId,saveCommentDto);
         return "redirect:/contents/" + contentId;
+    }
+
+    @GetMapping("/comment/{commentId}/delete") // 댓글의 PK값으로 댓글을 찾아서 삭제
+    public String deleteComment(@PathVariable Long commentId){
+
+         Long boardId = boardCommentService.deleteComment(commentId);
+         // 삭제하고 그 게시물의 번호를 리턴
+
+        return "redirect:/contents/" + boardId;
     }
 }

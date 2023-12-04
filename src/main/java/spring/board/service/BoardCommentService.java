@@ -31,4 +31,14 @@ public class BoardCommentService {
         List<FindCommentDto> findContents = boardCommentRepository.findByContentId(contentId);
         return findContents;
     }
+
+    public Long deleteComment(Long commentId) {
+
+        Long boardId = boardCommentRepository.findByCommentId(commentId).getBoardId();
+
+        BoardComment findComment = boardCommentRepository.findById(commentId).orElseThrow();
+        boardCommentRepository.delete(findComment);
+
+        return boardId;
+    }
 }
