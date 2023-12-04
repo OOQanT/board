@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import spring.board.domain.Board;
 import spring.board.domain.BoardComment;
 import spring.board.dto.boardcomment.FindCommentDto;
+import spring.board.dto.boardcomment.PostAuthRequest;
 import spring.board.dto.boardcomment.SaveCommentDto;
 import spring.board.repository.BoardCommentRepository;
 import spring.board.repository.BoardRepository;
@@ -32,13 +33,13 @@ public class BoardCommentService {
         return findContents;
     }
 
-    public Long deleteComment(Long commentId) {
-
-        Long boardId = boardCommentRepository.findByCommentId(commentId).getBoardId();
-
+    public void deleteComment(Long commentId) {
         BoardComment findComment = boardCommentRepository.findById(commentId).orElseThrow();
         boardCommentRepository.delete(findComment);
+    }
 
-        return boardId;
+    public PostAuthRequest getUserInfoForComment(Long commentId){
+        PostAuthRequest findAuth = boardCommentRepository.findAuthByCommentId(commentId);
+        return findAuth;
     }
 }

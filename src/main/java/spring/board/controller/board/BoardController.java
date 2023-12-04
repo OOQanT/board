@@ -1,14 +1,11 @@
 package spring.board.controller.board;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,10 +18,9 @@ import spring.board.dto.board.ContentDetailDto;
 import spring.board.dto.board.SearchCondition;
 import spring.board.dto.board.SearchContentDto;
 import spring.board.dto.boardcomment.FindCommentDto;
-import spring.board.repository.MemberRepository;
 import spring.board.service.BoardCommentService;
 import spring.board.service.BoardService;
-import spring.board.service.MemberService;
+
 
 import java.awt.print.Pageable;
 import java.util.List;

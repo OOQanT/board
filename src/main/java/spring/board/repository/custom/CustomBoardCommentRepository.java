@@ -1,10 +1,11 @@
 package spring.board.repository.custom;
 
 import spring.board.dto.boardcomment.FindCommentDto;
+import spring.board.dto.boardcomment.PostAuthRequest;
 
 import java.util.List;
 
 public interface CustomBoardCommentRepository {
     List<FindCommentDto> findByContentId(Long contentId);
-    FindCommentDto findByCommentId(Long commentId);
+    PostAuthRequest findAuthByCommentId(Long commentId);
 }

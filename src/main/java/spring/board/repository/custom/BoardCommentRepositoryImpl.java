@@ -2,9 +2,10 @@ package spring.board.repository.custom;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import spring.board.domain.QBoardComment;
 import spring.board.dto.boardcomment.FindCommentDto;
+import spring.board.dto.boardcomment.PostAuthRequest;
 import spring.board.dto.boardcomment.QFindCommentDto;
+import spring.board.dto.boardcomment.QPostAuthRequest;
 
 
 import java.util.List;
@@ -37,20 +38,18 @@ public class BoardCommentRepositoryImpl implements CustomBoardCommentRepository{
     }
 
     @Override
-    public FindCommentDto findByCommentId(Long commentId) {
+    public PostAuthRequest findAuthByCommentId(Long commentId) {
 
-        FindCommentDto findCommentDto = query
-                .select(new QFindCommentDto(
+        PostAuthRequest postAuthRequest = query
+                .select(new QPostAuthRequest(
                         boardComment.id.as("commentId"),
                         boardComment.board.id.as("boardId"),
-                        boardComment.nickname,
-                        boardComment.comment,
-                        boardComment.updateTime.as("lastUpdateTime")
+                        boardComment.board.member.username
                 ))
                 .from(boardComment)
                 .where(boardComment.id.eq(commentId))
                 .fetchOne();
 
-        return findCommentDto;
+        return postAuthRequest;
     }
 }
