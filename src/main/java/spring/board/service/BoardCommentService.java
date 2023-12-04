@@ -2,8 +2,10 @@ package spring.board.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.Board;
 import spring.board.domain.BoardComment;
+import spring.board.dto.boardcomment.EditCommentDto;
 import spring.board.dto.boardcomment.FindCommentDto;
 import spring.board.dto.boardcomment.PostAuthRequest;
 import spring.board.dto.boardcomment.SaveCommentDto;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardCommentService {
 
     private final BoardCommentRepository boardCommentRepository;
@@ -41,5 +44,10 @@ public class BoardCommentService {
     public PostAuthRequest getUserInfoForComment(Long commentId){
         PostAuthRequest findAuth = boardCommentRepository.findAuthByCommentId(commentId);
         return findAuth;
+    }
+
+    public void updateComment(Long commentId, EditCommentDto editCommentDto) {
+        BoardComment findComment = boardCommentRepository.findById(commentId).orElseThrow();
+        findComment.updateComment(editCommentDto.getComment());
     }
 }

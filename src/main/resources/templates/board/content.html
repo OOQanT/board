@@ -77,11 +77,21 @@
             <span style="display: inline-block; margin-left: 10px;" th:text="${#temporals.format(comment.lastUpdateTime,'yyyy-MM-dd HH:mm')}">등록 시간</span>
         </div>
         <div>
-            <input type="text" id="comment" class="form-control" th:value="${comment.comment}" readonly style="display: inline-block; width: 410px;">
-            <button type="button" class="btn btn-primary" style="display: inline-block; margin-left: 10px;">수정</button>
-            <button type="button" class="btn btn-danger"
-                    th:onclick="|location.href='@{/comment/{commentId}/delete(commentId = ${comment.commentId})}'|"
-                    style="display: inline-block; margin-left: 10px;">삭제</button>
+            <div th:id="'commentDisplay_'+ ${comment.commentId}">
+                <input type="text" id="comment" class="form-control" th:value="${comment.comment}" readonly style="display: inline-block; width: 410px;">
+                <button type="button" class="btn btn-primary edit-btn" th:data-comment-id="${comment.commentId}" style="display: inline-block; margin-left: 10px;">수정</button>
+                <button type="button" class="btn btn-danger"
+                        th:onclick="|location.href='@{/comment/{commentId}/delete(commentId = ${comment.commentId})}'|"
+                        style="display: inline-block; margin-left: 10px;">삭제</button>
+            </div>
+            <div th:id="'commentEdit_' + ${comment.commentId}" style="display: none;">
+                <form th:action="@{/comment/{commentId}/edit(commentId = ${comment.commentId})}"  method="post">
+                    <!-- 수정 시 나타날 부분 -->
+                    <input type="text" class="form-control" name="comment" th:value="${comment.comment}" style="display: inline-block; width: 410px;">
+                    <button type="submit" class="btn btn-success" th:data-comment-id="${comment.commentId}" style="display: inline-block; margin-left: 10px;">저장</button>
+                    <button type="button" class="btn btn-secondary cancel-btn" th:data-comment-id="${comment.commentId}" style="display: inline-block; margin-left: 10px;">취소</button>
+                </form>
+            </div>
         </div>
         <br/>
     </div>
@@ -109,6 +119,49 @@
             }
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var editButtons = document.querySelectorAll('.edit-btn');
+        var cancelButtons = document.querySelectorAll('.cancel-btn');
+
+        editButtons.forEach(function (editButton) {
+            editButton.addEventListener('click', function () {
+                var commentId = editButton.getAttribute('data-comment-id');
+                showEditMode(commentId);
+            });
+        });
+
+        cancelButtons.forEach(function (cancelButton) {
+            cancelButton.addEventListener('click', function () {
+                var commentId = cancelButton.getAttribute('data-comment-id');
+                hideEditMode(commentId);
+            });
+        });
+
+        function showEditMode(commentId) {
+            var displayElement = document.getElementById('commentDisplay_' + commentId);
+            var editElement = document.getElementById('commentEdit_' + commentId);
+
+            if (displayElement && editElement) {
+                displayElement.style.display = 'none';
+                editElement.style.display = 'block';
+            } else {
+                console.error('Elements not found for commentId: ' + commentId);
+            }
+        }
+
+        function hideEditMode(commentId) {
+            var displayElement = document.getElementById('commentDisplay_' + commentId);
+            var editElement = document.getElementById('commentEdit_' + commentId);
+
+            if (displayElement && editElement) {
+                displayElement.style.display = 'block';
+                editElement.style.display = 'none';
+            } else {
+                console.error('Elements not found for commentId: ' + commentId);
+            }
+        }
+    });
 </script>
 </body>
 </html>

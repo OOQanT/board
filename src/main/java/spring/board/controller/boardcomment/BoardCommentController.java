@@ -7,8 +7,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.board.domain.Member;
+import spring.board.dto.boardcomment.EditCommentDto;
 import spring.board.dto.boardcomment.PostAuthRequest;
 import spring.board.dto.boardcomment.SaveCommentDto;
 import spring.board.service.BoardCommentService;
@@ -54,6 +57,26 @@ public class BoardCommentController {
 
         // 삭제하고 그 게시물의 번호를 리턴
         boardCommentService.deleteComment(commentId);
+
+        return "redirect:/contents/" + userInfoForComment.getBoardId();
+    }
+
+
+    @PostMapping("/comment/{commentId}/edit")
+    public String editComment(@PathVariable Long commentId,
+                              @ModelAttribute("comment") EditCommentDto editCommentDto, Model model){
+
+        PostAuthRequest userInfoForComment = boardCommentService.getUserInfoForComment(commentId);
+        String username = userInfoForComment.getUsername();
+
+        if(!username.equals(getAuthMember().getUsername())){
+            model.addAttribute("message","다른 사용자의 댓글입니다.");
+            model.addAttribute("searchUrl","/contents/" + userInfoForComment.getBoardId());
+            return "warningPage";
+        }
+
+        log.info("editCommentDto",editCommentDto.getComment());
+        boardCommentService.updateComment(commentId,editCommentDto);
 
         return "redirect:/contents/" + userInfoForComment.getBoardId();
     }

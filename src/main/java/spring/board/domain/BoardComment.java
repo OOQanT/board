@@ -38,4 +38,8 @@ public class BoardComment {
     public void setBoard(Board board){
         this.board = board;
     }
+
+    public void updateComment(String comment){
+        this.comment = comment;
+    }
 }
