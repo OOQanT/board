@@ -25,7 +25,7 @@ public class Member {
     private String email;
     private String role;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Board> boards = new ArrayList<>();
 
     @CreationTimestamp

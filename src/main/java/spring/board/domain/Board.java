@@ -10,6 +10,8 @@ import spring.board.dto.board.BoardDto;
 
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +34,9 @@ public class Board {
 
     @UpdateTimestamp
     private LocalDateTime updateTime;
+
+    @OneToMany(mappedBy = "board",cascade = CascadeType.REMOVE)
+    private List<BoardComment> boardCommentList = new ArrayList<>();
 
     public Board(BoardDto boardDto){
         this.title = boardDto.getTitle();
