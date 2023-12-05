@@ -37,6 +37,7 @@ public class BoardComment {
 
     public void setBoard(Board board){
         this.board = board;
+        board.getBoardCommentList().add(this);
     }
 
     public void updateComment(String comment){
