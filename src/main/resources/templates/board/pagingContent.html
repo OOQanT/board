@@ -67,18 +67,18 @@
                 <ul class="pagination d-flex justify-content-center">
 
                    <li class="page-item" th:class="${contentPage.isFirst ? 'disabled' : ''}">
-                       <a class="page-link" th:href="${contentPage.isFirst ? '#' : '/content/search?page=' + (contentPage.number-1)}" aria-label="Previous">&laquo;</a>
+                       <a class="page-link" th:href="${contentPage.isFirst ? '#' : '/contents?page=' + (contentPage.number-1)}" aria-label="Previous">&laquo;</a>
                    </li>
 
                     <!-- 페이지 네비게이션 -->
                     <li class="page-item" th:each="pageNum : ${#numbers.sequence(T(java.lang.Math).max(0, contentPage.number - 2),T(java.lang.Math).min(contentPage.totalPages - 1, contentPage.number + 2))}"
                         th:class="${contentPage.number == pageNum ? 'active': ''}" aria-current="page">
-                        <a class="page-link" th:href="@{/content/search(page=${pageNum})}" th:text="${pageNum + 1}"></a>
+                        <a class="page-link" th:href="@{/contents(page=${pageNum})}" th:text="${pageNum + 1}"></a>
                     </li>
 
 
                    <li class="page-item" th:class="${contentPage.isLast ? 'disabled' : ''}">
-                       <a class="page-link" th:href="${contentPage.isLast ? '#' : '/content/search?page=' + (contentPage.number+1)}" aria-label="Next">&raquo;</a>
+                       <a class="page-link" th:href="${contentPage.isLast ? '#' : '/contents?page=' + (contentPage.number+1)}" aria-label="Next">&raquo;</a>
                    </li>
 
                 </ul>
