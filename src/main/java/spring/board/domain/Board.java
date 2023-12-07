@@ -41,6 +41,7 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Files> filesList = new ArrayList<>();
 
+
     public Board(BoardDto boardDto){
         this.title = boardDto.getTitle();
         this.content = boardDto.getContent();
