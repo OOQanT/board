@@ -22,7 +22,7 @@
                 <h2>글작성</h2>
             </div>
             <hr/>
-            <form th:action="@{/createContent}" th:object="${form}" method="post">
+            <form th:action="@{/createContent}" th:object="${form}" method="post" enctype="multipart/form-data">
                 <div>
                     <label for="title">제목</label>
                     <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="제목을 입력하세요" th:errorclass="field-error">

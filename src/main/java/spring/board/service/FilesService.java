@@ -1,12 +1,14 @@
 package spring.board.service;
 
+
+import jdk.jfr.StackTrace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import spring.board.domain.Board;
 import spring.board.domain.Files;
-import spring.board.dto.files.FilesSaveDto;
+import spring.board.dto.board.BoardDto;
 import spring.board.repository.FilesRepository;
 
 import java.io.File;
@@ -14,26 +16,25 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-@Transactional
+@StackTrace
 @RequiredArgsConstructor
 public class FilesService {
+
     @Value("${file.dir}")
     private String fileDir;
 
     private final FilesRepository filesRepository;
-    public void save(FilesSaveDto filesSaveDto) throws IOException {
-        List<MultipartFile> imageFiles = filesSaveDto.getImageFiles();
+
+    public void save(BoardDto boardDto, Board board) throws IOException {
+        List<MultipartFile> imageFiles = boardDto.getImageFiles();
 
         for (MultipartFile imageFile : imageFiles) {
-            Files files = new Files(imageFile.getOriginalFilename());
-            files.createStoreFileName();
+            Files file = new Files(imageFile.getOriginalFilename());
+            file.createStoreFileName();
+            file.setBoard(board);
 
-            imageFile.transferTo(new File(fileDir + files.getStoreFileName()));
-            filesRepository.save(files);
+            imageFile.transferTo(new File(fileDir + file.getStoreFileName()));
+            filesRepository.save(file);
         }
-    }
-
-    public List<Files> findFiles(){
-        return filesRepository.findAll();
     }
 }

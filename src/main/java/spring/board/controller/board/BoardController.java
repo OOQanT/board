@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +19,7 @@ import spring.board.dto.board.ContentDetailDto;
 import spring.board.dto.board.SearchCondition;
 import spring.board.dto.board.SearchContentDto;
 import spring.board.dto.boardcomment.FindCommentDto;
+import spring.board.dto.files.FilesSaveDto;
 import spring.board.service.BoardCommentService;
 import spring.board.service.BoardService;
 import spring.board.service.FilesService;
@@ -43,20 +45,22 @@ public class BoardController {
         return "board/board";
     }
 
+    @Transactional
     @PostMapping("/createContent")
     public String createContent(@Validated @ModelAttribute("form") BoardDto boardDto,
-                                BindingResult bindingResult) throws IOException {
+                                BindingResult bindingResult,
+                                @ModelAttribute FilesSaveDto filesSaveDto) throws IOException {
 
         if(bindingResult.hasErrors()){
             return "board/board";
         }
 
-       /* if(!boardDto.getImageFiles().isEmpty()){
-            //filesService.save();
-        }*/
-
         Board savedBoard = boardService.save(boardDto, getAuthMember().getUsername());
         log.info("savedBoard.getId() = {}",savedBoard.getId());
+
+        if(!boardDto.getImageFiles().isEmpty()){
+            filesService.save(boardDto, savedBoard);
+        }
 
         return "redirect:/contents";
     }

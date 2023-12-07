@@ -50,8 +50,8 @@ public class FilesController {
     @GetMapping("/items")
     public String items(Model model){
 
-        List<Files> files = filesService.findFiles();
-        model.addAttribute("items",files);
+        //List<Files> files = filesService.findFiles();
+        //model.addAttribute("items",files);
         return "files/item-view";
     }
 
