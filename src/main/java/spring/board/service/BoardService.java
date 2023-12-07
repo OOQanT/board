@@ -27,11 +27,13 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
-    public void save(BoardDto boardDto, String username){
+    public Board save(BoardDto boardDto, String username){
         Member findMember = memberRepository.findByUsername(username);
         Board board = new Board(boardDto);
         board.setMember(findMember);
         boardRepository.save(board);
+
+        return board;
     }
 
     public List<SearchContentDto> findContent(){

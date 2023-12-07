@@ -28,6 +28,10 @@
                     <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="제목을 입력하세요" th:errorclass="field-error">
                     <div class="field-error" th:errors="*{content}" />
                 </div>
+                <div class="mb-3">
+                    <label for="formFileMultiple" class="form-label">이미지</label>
+                    <input class="form-control" type="file" id="formFileMultiple" multiple="multiple" name="imageFiles">
+                </div>
                 <div>
                     <label for="content">내용</label>
                     <textarea id="content" th:field="*{content}" class="form-control" rows="8" cols="100" placeholder="내용을 입력하세요" th:errorclass="field-error"></textarea>

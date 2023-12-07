@@ -20,9 +20,11 @@ import spring.board.dto.board.SearchContentDto;
 import spring.board.dto.boardcomment.FindCommentDto;
 import spring.board.service.BoardCommentService;
 import spring.board.service.BoardService;
+import spring.board.service.FilesService;
 
 
 import java.awt.print.Pageable;
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -32,7 +34,9 @@ public class BoardController {
 
     private final BoardService boardService;
     private final BoardCommentService boardCommentService;
+    private final FilesService filesService;
 
+    //글작성 페이지
     @GetMapping("/board")
     public String board(Model model){
         model.addAttribute("form", new BoardDto());
@@ -41,13 +45,18 @@ public class BoardController {
 
     @PostMapping("/createContent")
     public String createContent(@Validated @ModelAttribute("form") BoardDto boardDto,
-                                BindingResult bindingResult){
+                                BindingResult bindingResult) throws IOException {
 
         if(bindingResult.hasErrors()){
             return "board/board";
         }
 
-        boardService.save(boardDto,getAuthMember().getUsername());
+       /* if(!boardDto.getImageFiles().isEmpty()){
+            //filesService.save();
+        }*/
+
+        Board savedBoard = boardService.save(boardDto, getAuthMember().getUsername());
+        log.info("savedBoard.getId() = {}",savedBoard.getId());
 
         return "redirect:/contents";
     }
