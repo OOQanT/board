@@ -2,6 +2,9 @@ package spring.board.controller.board;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -13,13 +16,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.board.domain.Board;
+import spring.board.domain.Files;
 import spring.board.domain.Member;
 import spring.board.dto.board.BoardDto;
 import spring.board.dto.board.ContentDetailDto;
 import spring.board.dto.board.SearchCondition;
 import spring.board.dto.board.SearchContentDto;
 import spring.board.dto.boardcomment.FindCommentDto;
-import spring.board.dto.files.FilesSaveDto;
+
+import spring.board.dto.files.FilesResponseDto;
 import spring.board.service.BoardCommentService;
 import spring.board.service.BoardService;
 import spring.board.service.FilesService;
@@ -27,12 +32,16 @@ import spring.board.service.FilesService;
 
 import java.awt.print.Pageable;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 public class BoardController {
+
+    @Value("${file.dir}")
+    private String fileDir;
 
     private final BoardService boardService;
     private final BoardCommentService boardCommentService;
@@ -48,8 +57,7 @@ public class BoardController {
     @Transactional
     @PostMapping("/createContent")
     public String createContent(@Validated @ModelAttribute("form") BoardDto boardDto,
-                                BindingResult bindingResult,
-                                @ModelAttribute FilesSaveDto filesSaveDto) throws IOException {
+                                BindingResult bindingResult) throws IOException {
 
         if(bindingResult.hasErrors()){
             return "board/board";
@@ -87,10 +95,22 @@ public class BoardController {
         // commentId, boardId, nickname, comment, lastUpdateTime
 
 
+        List<FilesResponseDto> files = filesService.findFiles(contentId);
+        for (FilesResponseDto file : files) {
+            log.info("file={}",file.getStoreFileName());
+        }
+        model.addAttribute("imageFiles",files);
+
         String boardUser = boardService.findById(contentId).getMember().getUsername();
         model.addAttribute("userId",namesEq(boardUser));
 
         return "board/content";
+    }
+
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileDir + filename);
     }
 
     private static Member getAuthMember() {

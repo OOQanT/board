@@ -9,10 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 import spring.board.domain.Board;
 import spring.board.domain.Files;
 import spring.board.dto.board.BoardDto;
+import spring.board.dto.files.FilesResponseDto;
 import spring.board.repository.FilesRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,5 +38,16 @@ public class FilesService {
             imageFile.transferTo(new File(fileDir + file.getStoreFileName()));
             filesRepository.save(file);
         }
+    }
+
+
+    public List<FilesResponseDto> findFiles(Long contentId) {
+        List<FilesResponseDto> files = new ArrayList<>();
+        List<Files> findFiles = filesRepository.findByBoardId(contentId);
+
+        for(Files file : findFiles){
+            files.add(new FilesResponseDto(file.getStoreFileName()));
+        }
+        return files;
     }
 }

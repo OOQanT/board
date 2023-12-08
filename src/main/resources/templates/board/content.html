@@ -43,10 +43,12 @@
             <label for="title">제목</label>
             <input type="text" id="title" th:field="*{title}" class="form-control" readonly >
         </div>
+        <img th:each="imageFile : ${imageFiles}" th:src="|/images/${imageFile.getStoreFileName()}|" class="rounded float-start" width="300" height="300"/>
         <div>
             <label for="content">내용</label>
             <textarea id="content" th:field="*{content}" class="form-control" rows="8" cols="100" readonly></textarea>
         </div>
+
        <!-- <hr class="my-4">-->
         <br/>
         <div class="row">
