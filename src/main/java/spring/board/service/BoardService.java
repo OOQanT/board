@@ -27,11 +27,13 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
-    public void save(BoardDto boardDto, String username){
+    public Board save(BoardDto boardDto, String username){
         Member findMember = memberRepository.findByUsername(username);
         Board board = new Board(boardDto);
         board.setMember(findMember);
         boardRepository.save(board);
+
+        return board;
     }
 
     public List<SearchContentDto> findContent(){
@@ -49,9 +51,10 @@ public class BoardService {
         return new ContentDetailDto(nickname, findBoard.getTitle(),findBoard.getContent());
     }
 
-    public void edit(BoardDto boardDto, Long contentId){
+    public Board edit(BoardDto boardDto, Long contentId){
         Board findBoard = boardRepository.findById(contentId).orElseThrow();
         findBoard.setBoard(boardDto.getTitle(), boardDto.getContent());
+        return findBoard;
     }
 
     public void delete(Long contentId){
