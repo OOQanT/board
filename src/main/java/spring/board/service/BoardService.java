@@ -51,9 +51,10 @@ public class BoardService {
         return new ContentDetailDto(nickname, findBoard.getTitle(),findBoard.getContent());
     }
 
-    public void edit(BoardDto boardDto, Long contentId){
+    public Board edit(BoardDto boardDto, Long contentId){
         Board findBoard = boardRepository.findById(contentId).orElseThrow();
         findBoard.setBoard(boardDto.getTitle(), boardDto.getContent());
+        return findBoard;
     }
 
     public void delete(Long contentId){

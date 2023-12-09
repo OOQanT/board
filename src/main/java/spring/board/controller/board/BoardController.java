@@ -16,7 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.board.domain.Board;
-import spring.board.domain.Files;
 import spring.board.domain.Member;
 import spring.board.dto.board.BoardDto;
 import spring.board.dto.board.ContentDetailDto;
@@ -30,7 +29,6 @@ import spring.board.service.BoardService;
 import spring.board.service.FilesService;
 
 
-import java.awt.print.Pageable;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
@@ -96,10 +94,12 @@ public class BoardController {
 
 
         List<FilesResponseDto> files = filesService.findFiles(contentId);
-        for (FilesResponseDto file : files) {
-            log.info("file={}",file.getStoreFileName());
+        if(!files.isEmpty()){
+            for (FilesResponseDto file : files) {
+                log.info("file={}",file.getStoreFileName());
+            }
+            model.addAttribute("imageFiles",files);
         }
-        model.addAttribute("imageFiles",files);
 
         String boardUser = boardService.findById(contentId).getMember().getUsername();
         model.addAttribute("userId",namesEq(boardUser));
@@ -143,19 +143,27 @@ public class BoardController {
         return "board/editForm";
     }
 
+    @Transactional
     @PostMapping("/content/{contentId}/edit")
     public String edit(@Validated @ModelAttribute("form") BoardDto form, BindingResult bindingResult,
-                       @PathVariable Long contentId){
+                       @PathVariable Long contentId) throws IOException {
 
         if(bindingResult.hasErrors()){
             return "board/editForm";
         }
 
-        boardService.edit(form,contentId);
+        Board editedBoard = boardService.edit(form, contentId);
+
+        if(form.getImageFiles().stream().anyMatch(file -> !file.isEmpty())){
+            filesService.updateFile(contentId,editedBoard,form);
+        }else{
+            filesService.deleteFilesAndEntity(contentId);
+        }
 
         return "redirect:/contents";
     }
 
+    @Transactional
     @GetMapping("/delete/content/{contentId}")
     public String delete(@PathVariable Long contentId,Model model){
         Board findBoard = boardService.findById(contentId);
@@ -165,7 +173,9 @@ public class BoardController {
             return "warningPage";
         }
 
+        filesService.deleteFiles(contentId);
         boardService.delete(contentId);
+
 
         model.addAttribute("message","글이 삭제되었습니다.");
         model.addAttribute("searchUrl","/contents");
@@ -187,6 +197,7 @@ public class BoardController {
 
         PageRequest pageable = PageRequest.of(page,size);
         Page<SearchContentDto> result = boardService.pagingContent(searchCondition,pageable);
+        log.info("result.getSize()={}",result.getTotalPages());
         model.addAttribute("contentPage",result);
 
         return "board/pagingContent";

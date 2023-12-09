@@ -66,6 +66,9 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination d-flex justify-content-center">
 
+                    <li class="page-item" th:class="${contentPage.isFirst ? 'disabled' : ''}">
+                        <a class="page-link" th:href="${contentPage.isFirst ? '#' : '/contents?page=0'}" aria-label="Previous">첫페이지</a>
+                    </li>
                    <li class="page-item" th:class="${contentPage.isFirst ? 'disabled' : ''}">
                        <a class="page-link" th:href="${contentPage.isFirst ? '#' : '/contents?page=' + (contentPage.number-1)}" aria-label="Previous">&laquo;</a>
                    </li>
@@ -80,6 +83,9 @@
                    <li class="page-item" th:class="${contentPage.isLast ? 'disabled' : ''}">
                        <a class="page-link" th:href="${contentPage.isLast ? '#' : '/contents?page=' + (contentPage.number+1)}" aria-label="Next">&raquo;</a>
                    </li>
+                    <li class="page-item" th:class="${contentPage.isLast ? 'disabled' : ''}">
+                        <a class="page-link" th:href="${contentPage.isLast ? '#' : '/contents?page=' + (contentPage.totalPages-1)}" aria-label="Next">마지막페이지</a>
+                    </li>
 
                 </ul>
             </nav>

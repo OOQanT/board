@@ -26,6 +26,10 @@ public class Files {
         this.uploadFileName = uploadFileName;
     }
 
+    public void changeUploadFileName(String uploadFileName){
+        this.uploadFileName = uploadFileName;
+    }
+
     public void createStoreFileName(){
         int pos = uploadFileName.lastIndexOf(".");
         String ext = uploadFileName.substring(pos + 1);
